@@ -7,4 +7,7 @@ class ApplicationController < ActionController::Base
 	  	@error = error_object #Error.new(error_code: "U_create", error_description: "Unable to save User", error_list: @user.errors.full_messages)
 	 	render status: status.to_sym, template: "errors/error"
 	  end
+	  def current_user
+	    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+	  end
 end
