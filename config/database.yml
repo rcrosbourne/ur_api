@@ -19,8 +19,8 @@ development:
   encoding: unicode
   database: ur_api_development
   pool: 5
-  username: ur_api
-  password:
+  username: smurf
+  password: dr1v3r1234
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -48,13 +48,5 @@ test:
   encoding: unicode
   database: ur_api_test
   pool: 5
-  username: ur_api
-  password:
-
-production:
-  adapter: postgresql
-  encoding: unicode
-  database: ur_api_production
-  pool: 5
-  username: ur_api
-  password:
+  username: smurf
+  password: dr1v3r1234
