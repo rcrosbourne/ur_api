@@ -28,6 +28,7 @@ gem 'turbolinks'
 #gem 'jbuilder', '~> 1.2'
 gem 'rabl' #This is api template
 gem 'oj' # json parser
+gem 'active_attr'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
