@@ -1,5 +1,7 @@
 UrApi::Application.routes.draw do
   
+  resources :roles
+
   post '/login' => 'sessions#create'
   delete '/logout' => 'sessions#destroy'
   
