@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
 	  user = User.find_by_email(params[:email])
 	  if user && user.authenticate(params[:password])
 	    session[:user_id] = user.id
+	    session[:user_policies] = user.policies
 	    render status: :ok, location: user_path(user), nothing: true
 	  else
 	  	#send error status
@@ -15,6 +16,7 @@ class SessionsController < ApplicationController
 	end
 	def destroy
 	  session[:user_id] = nil
+	  session[:user_policies] = nil
 	  render status: :ok, nothing: true
 	end
 end
