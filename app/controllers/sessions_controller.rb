@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  #skip_before_action AuthorizeFilter, only: [:create, :destroy]	
+  skip_filter(*_process_action_callbacks.map(&:filter), :only => [:create, :destroy])
   def create
 	  user = User.find_by_email(params[:email])
 	  if user && user.authenticate(params[:password])

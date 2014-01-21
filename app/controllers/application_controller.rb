@@ -3,9 +3,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
   
-  before_action do |controller| 
-  	#authorize!(controller)
-  end 
+  before_action do |controller|
+    authorize(controller)    
+  end
+  
   
   private
 	  def render_error(status, error_object)
@@ -15,16 +16,32 @@ class ApplicationController < ActionController::Base
 	  def current_user
 	    @current_user ||= User.find(session[:user_id]) if session[:user_id]
 	  end
-	  def authorize!(controller)
-	  	#if current_user
-	  		#if current_user.hasAccess(controller.class, controller.action)
-	  			# allow call
-	  		#else 
-	  			#render status: :unauthorized (with error message)
-	  		#end
-	  	#else
-	  		#render status: :not_allowed (with message saying u need to login)
-	  	#end
-    	#render text: "#{controller.action_name} #{controller.class}" 	  	
-	  end
+	  def authorize(controller)
+
+	  	if current_user
+	  		if current_user.policies.has_key?(controller.class) || current_user.policies.has_key?("all")
+	  			if current_user.policies.has_key?(controller.class)
+	  				if current_user.policies[controller.class][controller.action_name]
+	  					
+	  				else
+	  					render text: "Not Authorized" + " " + "#{controller.class} " + current_user.policies.to_s
+	  				end
+	  			elsif current_user.policies["all"][controller.action_name]  ||  current_user.policies["all"]["all"]
+	  			else
+	  				render text: "Not Authorized" + " " + "#{controller.class} " + current_user.policies.to_s
+	  			end
+	  		else
+	  			render text: "Not Authorized" + " " + "#{controller.class} " + current_user.policies.to_s
+	  		end
+
+	  		
+	  		# if current_user.policies["#{controller.class}"]["#{controller.action_name}"] == "true"
+	  		# else
+	  		# 	render text: "Not Authorized"
+	  		# end
+	  	else
+	  		render text: "Need to login"
+	  	end
+	  	#render text: "#{controller.class}" + "#" + "#{controller.action_name}"	
+	  end	  
 end
