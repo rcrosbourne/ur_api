@@ -1,5 +1,6 @@
 UrApi::Application.routes.draw do
   
+  use_doorkeeper
   resources :roles
 
   post '/login' => 'sessions#create'
