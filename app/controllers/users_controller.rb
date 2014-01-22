@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
 	respond_to :json
+  # doorkeeper_for :all
  	def create
  		@user = User.new(user_params)
  		if @user.save

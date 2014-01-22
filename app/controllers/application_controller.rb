@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
-  
+  doorkeeper_for :all
   before_action do |controller|
     authorize(controller)    
   end  
@@ -20,10 +20,11 @@ class ApplicationController < ActionController::Base
 	  	render_error("unauthorized", error)
 	  end
 	  def current_user
-	    @current_user ||= User.find(session[:user_id]) if session[:user_id]	    
+	    #@current_user ||= User.find(session[:user_id]) if session[:user_id]	    
+	    @current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
 	  end
 	  def current_policies
-	  	@current_user_policies ||= @current_user.policies if session[:user_policies]
+	  	@current_user_policies ||= @current_user.policies if doorkeeper_token
 	  end
 	  def authorize(controller)
 	  	#send error status

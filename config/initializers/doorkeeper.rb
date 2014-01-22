@@ -9,13 +9,14 @@ Doorkeeper.configure do
     # Example implementation:
     #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
     #User.authenticate!(params[:username], params[:password])
-    # if(session[:user_id])
-    #   User.find(session[:user_id])
-    # else
-    #   @error = ApplicationHelper.render_not_authenticated[:error]
-    #   render status: ApplicationHelper.render_not_authenticated[:status], template: ApplicationHelper.render_not_authenticated[:template]
-    #   #render status: :forbidden, template: "errors/error"
-    # end
+     # if(session[:user_id])
+     #   User.find(session[:user_id])
+     # else
+     #   @error = ApplicationHelper.render_not_authenticated[:error]
+     #   render status: ApplicationHelper.render_not_authenticated[:status], template: ApplicationHelper.render_not_authenticated[:template]
+     #   render status: :forbidden, template: "errors/error"
+     # end
+     User.find(doorkeeper_token.resource_owner_id)
   end
   resource_owner_from_credentials do |routes|
     User.authenticate!(params[:username], params[:password])
@@ -33,7 +34,7 @@ Doorkeeper.configure do
 
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
-  # access_token_expires_in 2.hours
+  #access_token_expires_in 2.hours
 
   # Issue access tokens with refresh token (disabled by default)
   use_refresh_token

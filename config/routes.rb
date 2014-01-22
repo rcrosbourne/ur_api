@@ -6,6 +6,7 @@ UrApi::Application.routes.draw do
   post '/login' => 'sessions#create'
   delete '/logout' => 'sessions#destroy'
   post 'token' => 'api_token#request_token'
+  put 'token' => 'api_token#request_refresh_token'
   
   resources :users, only: [:create, :index, :show, :update, :destroy]
   resources :sessions, only: [:create, :destroy]
