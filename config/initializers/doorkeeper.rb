@@ -5,10 +5,20 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
     #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
+    #User.authenticate!(params[:username], params[:password])
+    # if(session[:user_id])
+    #   User.find(session[:user_id])
+    # else
+    #   @error = ApplicationHelper.render_not_authenticated[:error]
+    #   render status: ApplicationHelper.render_not_authenticated[:status], template: ApplicationHelper.render_not_authenticated[:template]
+    #   #render status: :forbidden, template: "errors/error"
+    # end
+  end
+  resource_owner_from_credentials do |routes|
+    User.authenticate!(params[:username], params[:password])
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
@@ -26,7 +36,7 @@ Doorkeeper.configure do
   # access_token_expires_in 2.hours
 
   # Issue access tokens with refresh token (disabled by default)
-  # use_refresh_token
+  use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter :confirmation => true (default false) if you want to enforce ownership of
@@ -58,12 +68,13 @@ Doorkeeper.configure do
   #
   # test_redirect_uri 'urn:ietf:wg:oauth:2.0:oob'
 
-  # Under some circumstances you might want to have applications auto-approved,
+  # Under somskipe circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
   # For example if dealing with trusted a application.
-  # skip_authorization do |resource_owner, client|
+   skip_authorization do |resource_owner, client|
+    client.name == "UrAPI"
   #   client.superapp? or resource_owner.admin?
-  # end
+   end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   # realm "Doorkeeper"

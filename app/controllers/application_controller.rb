@@ -11,6 +11,14 @@ class ApplicationController < ActionController::Base
 	  	@error = error_object 
 	 	render status: status.to_sym, template: "errors/error"
 	  end
+	  def render_not_authenticated
+	  	error = Error.new(error_code: "1", error_description: "You are not authenticated. Please login at")
+  		render_error("forbidden", error)
+	  end
+	  def render_not_authorized
+	  	error = Error.new(error_code: "1", error_description: "You are not authorized to perform required action")
+	  	render_error("unauthorized", error)
+	  end
 	  def current_user
 	    @current_user ||= User.find(session[:user_id]) if session[:user_id]	    
 	  end
@@ -25,17 +33,16 @@ class ApplicationController < ActionController::Base
 	  			if current_policies.has_key?(controller.class)
 	  				if !current_policies[controller.class][controller.action_name]
 	  					# render status: :unprocessable_entity, template: "errors/error"
-			 		 	render_error("unauthorized", error)
+			 		 	render_not_authorized
 	  				end
 	  			elsif !(current_policies["all"][controller.action_name]  ||  current_policies["all"]["all"])
-	  				render_error("unauthorized", error)
+	  				render_not_authorized
 	  			end
 	  		else
-	  			render_error("unauthorized", error)
+	  			render_not_authorized
 	  		end
 	  	else
-	  		error = Error.new(error_code: "1", error_description: "You are not authenticated. Please login at")
-	  		render_error("forbidden", error)
+	  		render_not_authenticated
 	  	end
 	  end	  
 end

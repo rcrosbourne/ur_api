@@ -1,0 +1,15 @@
+Callback urls:
+http://localhost:3001/auth/myapi/callback
+
+Application Id:
+15016098cbd09c9ac13c188fdbd7d4057fa350cd71dc0fa8e2ba42538fa20ac6
+
+Secret:
+f1ae9ded8ec6ce56ef3f392f79aa565ccc67bb58f109187eb43ad42d4baa6c39
+
+Link to authorization code:
+Authorize
+http://localhost:3000/oauth/authorize?
+client_id=15016098cbd09c9ac13c188fdbd7d4057fa350cd71dc0fa8e2ba42538fa20ac6&
+redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fauth%2Fmyapi%2Fcallback&
+response_type=code

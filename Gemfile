@@ -30,6 +30,8 @@ gem 'rabl' #This is api template
 gem 'oj' # json parser
 gem 'active_attr'
 gem 'doorkeeper' #oauth2 provider
+gem 'oauth2' #oauth2 client
+gem 'puma' #multithreaded webserver
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
