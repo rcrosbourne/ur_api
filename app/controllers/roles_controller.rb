@@ -62,7 +62,66 @@ class RolesController < ApplicationController
 		 render status: :bad_request
 	  end  		
 	end
-	private
+	#add_to_user_role
+  def add_user_to
+    #find user
+    #find role
+    #add_role if not already part of user profile
+    role_id = params[:id]
+    user_id = params[:user_id]
+    begin
+      user = User.find(user_id)
+      if user
+        #find Role
+        role = Role.find(role_id)
+        if role
+          user.roles << role unless user.roles.include?(role)
+          #render user_not_found
+          render status: :created, nothing: true
+        else
+          #render user_not_found
+          error = Error.new(error: "Role not found", error_description: "Unable to locate role")
+          render_error("unprocessable_entity", error)  
+        end
+      else
+        #render user_not_found
+        error = Error.new(error: "User not found", error_description: "Unable to locate user")
+        render_error("unprocessable_entity", error)
+      end  
+    rescue ActiveRecord::RecordNotFound => e
+        render text: e.message, nothing: true, status: :bad_request     
+    end
+  end
+  def remove_user_from
+    #find user
+    #find role
+    #add_role if not already part of user profile
+    role_id = params[:id]
+    user_id = params[:user_id]
+    begin
+      user = User.find(user_id)
+      if user
+        #find Role
+        role = Role.find(role_id)
+        if role
+          user.roles.delete(role) if user.roles.include?(role)
+          #render user_not_found
+          render status: :ok, nothing: true
+        else
+          #render user_not_found
+          error = Error.new(error: "Role not found", error_description: "Unable to locate role")
+          render_error("unprocessable_entity", error)  
+        end
+      else
+        #render user_not_found
+        error = Error.new(error: "User not found", error_description: "Unable to locate user")
+        render_error("unprocessable_entity", error)
+      end  
+    rescue ActiveRecord::RecordNotFound => e
+        render text: e.message, nothing: true, status: :bad_request     
+    end
+  end
+  private
 		def role_params
 			params.require(:role).permit(:name, :description, :policies)
 	  	end

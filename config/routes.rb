@@ -1,14 +1,24 @@
 UrApi::Application.routes.draw do
   
   use_doorkeeper
-  resources :roles
+  resources :roles do
+    member do
+      post 'add_user_to'
+      delete 'remove_user_from'
+    end
+  end
 
   post '/login' => 'sessions#create'
   delete '/logout' => 'sessions#destroy'
   post 'token' => 'api_token#request_token'
   put 'token' => 'api_token#request_refresh_token'
   
-  resources :users, only: [:create, :index, :show, :update, :destroy]
+  resources :users, only: [:create, :index, :show, :update, :destroy] do
+    member do
+      post 'add_role_to'
+      delete 'remove_role_from'
+    end
+  end
   resources :sessions, only: [:create, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 	respond_to :json
-  # doorkeeper_for :all
+
  	def create
  		@user = User.new(user_params)
  		if @user.save
@@ -63,6 +63,66 @@ class UsersController < ApplicationController
       error = Error.new(error_code: "U_show", error_description: "User Not Found")
       render_error("not_found",error)
     end    
+  end
+  #add_role_to_user
+  def add_role_to
+    #find user
+    #find role
+    #add_role if not already part of user profile
+    user_id = params[:id]
+    role_id = params[:role_id]
+    begin
+      user = User.find(user_id)
+      if user
+        #find Role
+        role = Role.find(role_id)
+        if role
+          user.roles << role unless user.roles.include?(role)
+          #render user_not_found
+          render status: :created, nothing: true
+        else
+          #render user_not_found
+          error = Error.new(error: "Role not found", error_description: "Unable to locate role")
+          render_error("unprocessable_entity", error)  
+        end
+      else
+        #render user_not_found
+        error = Error.new(error: "User not found", error_description: "Unable to locate user")
+        render_error("unprocessable_entity", error)
+      end  
+    rescue ActiveRecord::RecordNotFound => e
+        render text: e.message, nothing: true, status: :bad_request     
+    end
+  end
+  #add_role_to_user
+  def remove_role_from
+    #find user
+    #find role
+    #add_role if not already part of user profile
+    user_id = params[:id]
+    role_id = params[:role_id]
+    begin
+      user = User.find(user_id)
+      if user
+        #find Role
+        role = Role.find(role_id)
+        if role
+          user.roles.delete(role) if user.roles.include?(role)
+          #render user_not_found
+          render status: :ok, nothing: true
+        else
+          #render user_not_found
+          error = Error.new(error: "Role not found", error_description: "Unable to locate role")
+          render_error("unprocessable_entity", error)  
+        end
+      else
+        #render user_not_found
+        error = Error.new(error: "User not found", error_description: "Unable to locate user")
+        render_error("unprocessable_entity", error)
+      end  
+    rescue ActiveRecord::RecordNotFound => e
+        render text: e.message, nothing: true, status: :bad_request     
+    end
   end
   	private
   		def user_params
