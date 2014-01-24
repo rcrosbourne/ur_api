@@ -13,11 +13,11 @@ class ApplicationController < ActionController::Base
 	  end
 	  def render_not_authenticated
 	  	error = Error.new(error_code: "1", error_description: "You are not authenticated. Please login at")
-  		render_error("forbidden", error)
+  		render_error("unauthorized", error)
 	  end
 	  def render_not_authorized
 	  	error = Error.new(error_code: "1", error_description: "You are not authorized to perform required action")
-	  	render_error("unauthorized", error)
+	  	render_error("forbidden", error)
 	  end
 	  def current_user
 	    #@current_user ||= User.find(session[:user_id]) if session[:user_id]	    
